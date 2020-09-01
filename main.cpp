@@ -6,8 +6,7 @@
 int main()
 {
     std::string input;
-    Value result;
-    Solver *solver;
+    Solver *solver = nullptr;
 
     std::cout << "This is calc, type \"quit\" to exit." << std::endl;
 
@@ -18,15 +17,14 @@ int main()
         if(input == "quit")
             break;
 
+        solver = new Solver(input);
         try {
-            solver = new Solver(input);
-            result = solver->interpret();
-
-            std::cout << "Result: " << result << std::endl;
-
+            std::cout << "Result: " << solver->interpret() << std::endl;
         } catch (SolverException& error) {
             std::cout << "Invalid expression!" << std::endl;
         }
+
+        delete solver;
     }
 
     return 0;
