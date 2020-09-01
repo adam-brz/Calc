@@ -6,6 +6,12 @@ AddExpr::AddExpr(ArithmeticExpr *op1, ArithmeticExpr *op2) :
 
 }
 
+AddExpr::~AddExpr()
+{
+    delete op1;
+    delete op2;
+}
+
 Value AddExpr::interpret() 
 {
     return op1->interpret() + op2->interpret();

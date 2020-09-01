@@ -3,7 +3,7 @@
 
 #include "ArithmeticExpr.h"
 
-class DivideExpr : ArithmeticExpr
+class DivideExpr : public ArithmeticExpr
 {
 private:
     ArithmeticExpr *op1;
@@ -11,6 +11,8 @@ private:
 
 public:
     DivideExpr(ArithmeticExpr *op1, ArithmeticExpr *op2);
+    ~DivideExpr();
+    
     Value interpret() override;
 };
 

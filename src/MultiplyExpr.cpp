@@ -6,6 +6,12 @@ MultiplyExpr::MultiplyExpr(ArithmeticExpr *op1, ArithmeticExpr *op2) :
 
 }
 
+MultiplyExpr::~MultiplyExpr()
+{
+    delete op1;
+    delete op2;
+}
+
 Value MultiplyExpr::interpret() 
 {
     return op1->interpret() * op2->interpret();

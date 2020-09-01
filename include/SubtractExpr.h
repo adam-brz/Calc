@@ -11,6 +11,8 @@ private:
 
 public:
     SubtractExpr(ArithmeticExpr *op1, ArithmeticExpr *op2);
+    ~SubtractExpr();
+    
     Value interpret() override;
 };
 

@@ -1,10 +1,33 @@
 #include "Solver.h"
+#include "SolverException.h"
+
 #include <iostream>
 
 int main()
 {
-    Solver solver("1 + ((2*3 + 1) + (2 + 3*5)*2) - 3*(2 - 1)");
-    std::cout << solver.interpret() << std::endl;
+    std::string input;
+    Value result;
+    Solver *solver;
+
+    std::cout << "This is calc, type \"quit\" to exit." << std::endl;
+
+    while(true) {
+        std::cout << "> ";
+        std::getline(std::cin, input);
+
+        if(input == "quit")
+            break;
+
+        try {
+            solver = new Solver(input);
+            result = solver->interpret();
+
+            std::cout << "Result: " << result << std::endl;
+
+        } catch (SolverException& error) {
+            std::cout << "Invalid expression!" << std::endl;
+        }
+    }
 
     return 0;
 }

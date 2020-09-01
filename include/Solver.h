@@ -4,7 +4,6 @@
 #include "ArithmeticExpr.h"
 #include <string>
 #include <list>
-#include <utility>
 
 class Solver : ArithmeticExpr
 {
@@ -20,23 +19,12 @@ public:
     Value interpret() override;
 
 private:
-    ArithmeticExpr* parseSubLiteral(std::string literal);
-    bool isDigit(char c);
-
     void applyOperator();
 
-    int findBracketEnd(std::string literal, int bracketStart);
-    void clearMemory();
-};
+    int parseChar(int pos);
+    int findBracketEnd(int bracketStart);
 
-class Operator
-{
-    static const std::list<std::pair<char, int>> operators;
-
-public:
-    static bool isOperator(char c);
-    static bool hasHigherPriority(char op1, char op2);
-    static int getPriority(char op);
+    bool isDigit(char c);
 };
 
 #endif // _SOLVER_H
