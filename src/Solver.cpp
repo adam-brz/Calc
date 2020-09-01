@@ -5,10 +5,6 @@
 #include "SubtractExpr.h"
 #include "MultiplyExpr.h"
 
-#include <iostream>
-
-using namespace std;
-
 const std::list<std::pair<char, int>> Operator::operators = 
 {
     std::make_pair('-', 1),
@@ -38,64 +34,33 @@ void Solver::clearMemory()
 
 Value Solver::interpret()
 {
-    cout << "Solve requested\n";
-
-    ArithmeticExpr* final = parseSubLiteral(literal);
-    Value result = 0;
-
-    if(final) {
-        result = final->interpret();
-    }
-
-    clearMemory();
-    return result;
-}
-
-ArithmeticExpr* Solver::parseSubLiteral(std::string literal)
-{
     size_t idx;
-    std::string a;
-
-    cout << "Parsing: " << literal << endl;
-    
 
     for(int i = 0; i < literal.size(); ++i)
     {
-        std::getline (std::cin,a);
-
-        cout << "i: " << i << endl;
-        
-
         if(literal[i] == ' ')
             continue;
         else if(isDigit(literal[i]))
         {
             double val = std::stod(literal.substr(i), &idx);
-            cout << "Number: " << val << endl;
-            
             expressions.push_back(new ValueExpr(val));
             i += idx - 1;
         }
         else if(literal[i] == '(')
         {
             idx = findBracketEnd(literal, i);
-            expressions.push_back(parseSubLiteral(literal.substr(i + 1, idx - i - 1)));
-            cout << "Parsed brackets: " << i << ":" << idx << endl;
+            expressions.push_back(new Solver(literal.substr(i + 1, idx - i - 1)));
             i = idx;
             
         }
         else if(Operator::isOperator(literal[i]))
         {
-            cout << "Operator: " << literal[i] << endl;
             while(!operators.empty() && Operator::hasHigherPriority(operators.back(), literal[i]))
             {
-                cout << "Applying: " << operators.back() << endl;
                 applyOperator();
             }
             operators.push_back(literal[i]);
         }
-
-        cout << "Expressions: " << expressions.size() << endl;
     }
 
     while(!operators.empty())
@@ -103,7 +68,7 @@ ArithmeticExpr* Solver::parseSubLiteral(std::string literal)
         applyOperator();
     }
 
-    return expressions.front();
+    return expressions.front()->interpret();
 }
 
 void Solver::applyOperator()
@@ -111,10 +76,10 @@ void Solver::applyOperator()
     ArithmeticExpr *newExpr = nullptr;
     ArithmeticExpr *op1, *op2;
 
-    op1 = expressions.back();
+    op2 = expressions.back();
     expressions.pop_back();
 
-    op2 = expressions.back();
+    op1 = expressions.back();
     expressions.pop_back();
 
     switch (operators.back())

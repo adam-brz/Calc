@@ -17,7 +17,6 @@ public:
     Solver(const std::string &literal);
     ~Solver();
     
-    Value solve(std::string literal);
     Value interpret() override;
 
 private:
