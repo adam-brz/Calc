@@ -2,10 +2,6 @@
 #include "ExprFactory.h"
 #include "SolverException.h"
 
-#include <iostream>
-using namespace std;
-
-
 Solver::Solver(const std::string &literal) :
     literal(literal)
 {
