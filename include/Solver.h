@@ -20,8 +20,9 @@ public:
 
 private:
     void applyHighestPriority();
-    int getHighestPriorityIndex();
+    
     void mergeExpressionPair(int index);
+    int getHighestPriorityIndex();
 
     int parseChar(int pos);
     int findBracketEnd(int bracketStart);
