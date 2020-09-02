@@ -2,11 +2,18 @@ CC = g++
 PROG_NAME = calc
 
 OUT_DIR = bin
-INCLUDE_DIR = include
 BUILD_DIR = build
-SRC = src
 
-OUT = $(OUT_DIR)/$(PROG_NAME).exe
+SRC = src
+INCLUDE_DIR = include
+
+ifeq ($(OS),Windows_NT)
+	EXT = .exe
+else
+	EXT = 
+endif
+
+OUT = $(OUT_DIR)/$(PROG_NAME)$(EXT)
 
 FILES = $(patsubst $(SRC)/%.cpp,%.cpp,$(wildcard $(SRC)/*.cpp))
 OBJS = $(foreach file,$(subst .cpp,.o,$(FILES)),$(BUILD_DIR)/$(file))
