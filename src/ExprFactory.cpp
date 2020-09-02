@@ -5,6 +5,7 @@
 #include "SubtractExpr.h"
 #include "MultiplyExpr.h"
 #include "DivideExpr.h"
+#include "PowExpr.h"
 
 const std::list<std::pair<char, int>> ExprFactory::operators = 
 {
@@ -12,6 +13,7 @@ const std::list<std::pair<char, int>> ExprFactory::operators =
     std::make_pair('+', 1),
     std::make_pair('/', 2),
     std::make_pair('*', 2),
+    std::make_pair('^', 3)
 };
 
 ArithmeticExpr *ExprFactory::makeExpression(char operation,
@@ -31,6 +33,9 @@ ArithmeticExpr *ExprFactory::makeExpression(char operation,
 
     case '*':
         return new MultiplyExpr(op1, op2);
+
+    case '^':
+        return new PowExpr(op1, op2);
     }
 
     return nullptr;

@@ -66,3 +66,16 @@ TEST_CASE("Exception throwing", "[Solver]")
     CHECK_THROWS_AS(solver3.interpret(), SolverException);
     CHECK_THROWS_AS(solver4.interpret(), SolverException);
 }
+
+TEST_CASE("Pow functionality", "[Solver]")
+{
+    Solver solver1("2^3");
+    Solver solver2("2*(1+2)^2");
+    Solver solver3("2^3^2");
+    Solver solver4("1+9^0.5");
+
+    CHECK(solver1.interpret() == Approx(8));
+    CHECK(solver2.interpret() == Approx(18));
+    CHECK(solver3.interpret() == Approx(64));
+    CHECK(solver4.interpret() == Approx(4));
+}
