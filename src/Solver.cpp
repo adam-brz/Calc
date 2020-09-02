@@ -2,6 +2,10 @@
 #include "ExprFactory.h"
 #include "SolverException.h"
 
+#include <iostream>
+using namespace std;
+
+
 Solver::Solver(const std::string &literal) :
     literal(literal)
 {
@@ -19,11 +23,11 @@ Value Solver::interpret()
     for(int i = 0; i < literal.size(); ++i)
         i = parseChar(i);
 
-    while(!operators.empty())
-        applyOperator();
-
-    if(expressions.size() != 1)
+    if(operators.size() + 1 != expressions.size())
         throw SolverException();
+
+    while(!operators.empty())
+        applyHighestPriority();
 
     return expressions.front()->interpret();
 }
@@ -51,11 +55,6 @@ int Solver::parseChar(int pos)
     }
     else if (ExprFactory::isOperator(chr))
     {
-        while (!operators.empty() &&
-                 ExprFactory::hasHigherPriority(operators.back(), chr))
-        {
-            applyOperator();
-        }
         operators.push_back(chr);
     }
     else if(chr != ' ')
@@ -66,21 +65,58 @@ int Solver::parseChar(int pos)
     return pos;
 }
 
-void Solver::applyOperator()
+void Solver::applyHighestPriority()
+{
+    const int index = getHighestPriorityIndex();
+    mergeExpressionPair(index);
+}
+
+int Solver::getHighestPriorityIndex()
+{
+    int index, newPriority, i;
+    int priority = -1;
+
+    i = 0;
+    for(const auto &op: operators)
+    {
+        newPriority = ExprFactory::getPriority(op);
+
+        if(newPriority > priority)
+        {
+            index = i;
+            priority = newPriority;
+        }
+
+        ++i;
+    }
+        
+    return index;
+}
+
+void Solver::mergeExpressionPair(int index)
 {
     ArithmeticExpr *newExpr;
-    ArithmeticExpr *op1, *op2;
+    auto operatorIter = operators.begin();
+    auto iter1 = expressions.begin();
+    auto iter2 = iter1;
+    int i = 0;
 
-    op2 = expressions.back();
-    expressions.pop_back();
+    while(iter2 != expressions.end() && i < index)
+    {
+        ++iter2;
+        ++operatorIter;
+        ++i;
+    }
+    
+    iter1 = iter2;
+    ++iter2;
 
-    op1 = expressions.back();
-    expressions.pop_back();
+    newExpr = ExprFactory::makeExpression(*operatorIter, *iter1, *iter2);
+    expressions.insert(iter1, newExpr);
 
-    newExpr = ExprFactory::makeExpression(operators.back(), op1, op2);
-    operators.pop_back();
-
-    expressions.push_back(newExpr);
+    operators.erase(operatorIter);
+    expressions.erase(iter1);
+    expressions.erase(iter2);
 }
 
 bool Solver::isDigit(char c)

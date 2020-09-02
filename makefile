@@ -27,7 +27,7 @@ $(BUILD_DIR)/%.o: $(SRC)/%.cpp
 $(BUILD_DIR)/%.o: tests/%.cpp
 	$(CC) -I$(INCLUDE_DIR) -c $< -o $@
 
-run: all
+run:
 	$(OUT)
 
 clean:

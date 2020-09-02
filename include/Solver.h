@@ -19,7 +19,9 @@ public:
     Value interpret() override;
 
 private:
-    void applyOperator();
+    void applyHighestPriority();
+    int getHighestPriorityIndex();
+    void mergeExpressionPair(int index);
 
     int parseChar(int pos);
     int findBracketEnd(int bracketStart);
