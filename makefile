@@ -21,10 +21,10 @@ OBJS = $(foreach file,$(subst .cpp,.o,$(FILES)),$(BUILD_DIR)/$(file))
 TESTS = $(patsubst tests/%.cpp,%.cpp,$(wildcard tests/*.cpp))
 TEST_OBJS = $(foreach file,$(subst .cpp,.o,$(TESTS)),$(BUILD_DIR)/$(file))
 
-all: $(OBJS)
+all: build_dirs $(OBJS)
 	$(CC) -I$(INCLUDE_DIR) -o $(OUT) $(OBJS) main.cpp
 
-tests: $(OBJS) $(TEST_OBJS)
+tests: build_dirs $(OBJS) $(TEST_OBJS)
 	$(CC) -I$(INCLUDE_DIR) -Itests -o $(OUT) $(TEST_OBJS) $(OBJS) testmain.cpp
 	$(OUT)
 
@@ -33,6 +33,10 @@ $(BUILD_DIR)/%.o: $(SRC)/%.cpp
 
 $(BUILD_DIR)/%.o: tests/%.cpp
 	$(CC) -I$(INCLUDE_DIR) -c $< -o $@
+
+build_dirs:
+	-mkdir $(BUILD_DIR)
+	-mkdir $(OUT_DIR)
 
 run:
 	$(OUT)
