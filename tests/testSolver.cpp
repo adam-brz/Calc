@@ -2,6 +2,12 @@
 #include "Solver.h"
 #include "SolverException.h"
 
+TEST_CASE("Pass empty string", "[Solver]")
+{
+    Solver solver("");
+    CHECK_THROWS_AS(solver.interpret(), SolverException);
+}
+
 TEST_CASE("Solving simple equations", "[Solver]")
 {
     Solver solver1("2 + 2");
